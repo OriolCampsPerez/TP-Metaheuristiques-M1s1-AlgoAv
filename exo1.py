@@ -1,4 +1,5 @@
 import random
+import sys
 
 # TP Métaheuristiques
 # Oriol CAMPS PÉREZ
@@ -27,7 +28,11 @@ def list_to_sqMatrix(list, sqrSize, padding=0):
 
     return r
 
-with open("txt/partition6.txt", "r") as fichier:
+# QUESTION 1.6 (partie séléction du fichier)
+if(len(sys.argv) < 2):
+    print("Usage: python3 "+sys.argv[0]+" <path_to_file>")
+    exit(1)
+with open(sys.argv[1], "r") as fichier:
     if fichier.readable():
         n=int(fichier.read(1)) # = "6"
         p=int(fichier.read(2)[1]) # = "62" [1] = "2"
@@ -44,11 +49,12 @@ def f(X, q=Q): # paramètre q ajouté pour pouvoir faire des tests
 # QUESTION 1.1
 def random_sol():
     r=[]
-    for i in range(n):
+    for _ in range(n):
         r.append(random.randint(0, 1))
     return r
 
 randX = random_sol()
+#print(randX)
 
 # QUESTION 1.2
 res12 = f(randX)
@@ -71,6 +77,55 @@ def tests12():
     return True
 tests12()
 
+# QUESTION 1.3
+def meilleur_voisin(X):
+    meilleur= X.copy()
+    for i in range(len(X)):
+        voisinX = X.copy()
+        voisinX[i] = 1 - voisinX[i]
+        if f(voisinX) < f(meilleur): # si meilleur (inférieur), on le garde
+            meilleur = voisinX
+        elif f(voisinX) == f(meilleur): # si égalité, on choisi aléatoirement
+            if random.randint(0, 1) == 1:
+                meilleur = voisinX
+    return meilleur
+
+# QUESTION 1.4
+def steepest_hill_climbing(X, max_depl=1000):
+    Xp = X.copy()
+    nb_depl = 0
+    stop = False
+    while nb_depl < max_depl and not stop:
+        mvX = meilleur_voisin(Xp)
+        if f(mvX) < f(Xp):
+            Xp = mvX
+        else:
+            stop = True
+        nb_depl += 1
+    return Xp
+
+# QUESTION 1.5
+def steepest_hill_climbing_redemarrage(X, max_depl=1000, max_essais=1000):
+    nb_essais = 0
+    Xp = X.copy()
+    while nb_essais < max_essais:
+        mvX = steepest_hill_climbing(random_sol(), max_depl)
+        if f(mvX) < f(Xp):
+            Xp = mvX
+        nb_essais += 1
+    return Xp
+
+# QUESTION 1.6 (partie affichage)
+print("n = "+str(n))
+print("p = "+str(p))
+print("Q = "+str(Q)+"\n")
+print("X de départ = \t\t\t"+str(randX)+"\t"+"f(X) = "+str(f(randX)))
+shc_red= steepest_hill_climbing_redemarrage(randX)
+print("SHC avec redemarrage de X = \t"+str(shc_red)+"\t"+"f(X) = "+str(f(shc_red)))
+
+# Résultats: 
+#   partition6.txt = -29 
+#   graphe12345.txt = 
 
 
 # REFERENCES
@@ -78,4 +133,6 @@ tests12()
 # https://www.pythoncentral.io/cutting-and-slicing-strings-in-python/
 # https://www.w3schools.com/python/ref_string_split.asp
 # https://www.geeksforgeeks.org/python-random-module/
-#
+# https://blog.devgenius.io/5-different-ways-to-copy-list-in-python-9478bc6d8f02
+# https://python-para-impacientes.blogspot.com/2014/02/ejecutar-programas-con-argumentos.html
+# 
