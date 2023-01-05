@@ -34,15 +34,21 @@ if(len(sys.argv) < 2):
     exit(1)
 with open(sys.argv[1], "r") as fichier:
     if fichier.readable():
-        n=int(fichier.read(1)) # = "6"
-        p=int(fichier.read(2)[1]) # = "62" [1] = "2"
-        Q=list_to_sqMatrix(strList_to_intList(fichier.read()[3:].split()), n)
+        Q=strList_to_intList(fichier.read().split())
+        n=Q[0]
+        p=Q[1]
+        print(Q)
+        print(n)
+        print(p)
+        Q=list_to_sqMatrix(Q[2:], n)
+        print(Q)
+        print()
 
 # fonction f(x) de l'enoncé
 def f(X, q=Q): # paramètre q ajouté pour pouvoir faire des tests
     r=0
-    for i in range(n-1):
-        for j in range(n-1):
+    for i in range(len(X)):
+        for j in range(len(X)):
             r+= q[i][j] * X[i]*X[j]
     return r
 
@@ -75,7 +81,7 @@ def tests12():
     assert list_to_sqMatrix(Qlist_t12, n_t12) == Qmatrix_t12
     assert f(X_t12, list_to_sqMatrix(Qlist_t12, n_t12)) == 6
     return True
-tests12()
+#tests12() # test avec partition6.txt
 
 # QUESTION 1.3
 def meilleur_voisin(X):
@@ -119,13 +125,13 @@ def steepest_hill_climbing_redemarrage(X, max_depl=1000, max_essais=1000):
 print("n = "+str(n))
 print("p = "+str(p))
 print("Q = "+str(Q)+"\n")
-print("X de départ = \t\t\t"+str(randX)+"\t"+"f(X) = "+str(f(randX)))
+print("X de départ = \t\t\t"+str(randX)+"\t"+"f(X) = "+str(res12))
 shc_red= steepest_hill_climbing_redemarrage(randX)
 print("SHC avec redemarrage de X = \t"+str(shc_red)+"\t"+"f(X) = "+str(f(shc_red)))
 
 # Résultats: 
-#   partition6.txt = -29 
-#   graphe12345.txt = 
+#   partition6.txt = -34 
+#   graphe12345.txt = -20
 
 
 # REFERENCES
