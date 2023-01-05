@@ -7,6 +7,10 @@ import sys
 
 # EXERCICE 1 : Unconstrained Binary Quadratic Problem
 
+# CONFIGURATION PAR DEFAUT
+MAX_DEPL = 1000
+MAX_ESSAIS = 1000
+
 # recupération des données Q, n et p
 def strList_to_intList(l):
     for i in range(len(l)):
@@ -110,7 +114,7 @@ def meilleur_voisin_contrainte(X): # version modifiée pour la question 1.8
     return meilleur
 
 # QUESTION 1.4
-def steepest_hill_climbing(X, max_depl=1000, meilleur_voisin=meilleur_voisin_simple):
+def steepest_hill_climbing(X, max_depl=MAX_DEPL, meilleur_voisin=meilleur_voisin_simple):
     Xp = X.copy()
     nb_depl = 0
     stop = False
@@ -124,7 +128,7 @@ def steepest_hill_climbing(X, max_depl=1000, meilleur_voisin=meilleur_voisin_sim
     return Xp
 
 # QUESTION 1.5
-def steepest_hill_climbing_redemarrage(X, max_depl=1000, max_essais=1000, meilleur_voisin=meilleur_voisin_simple):
+def steepest_hill_climbing_redemarrage(X, max_depl=MAX_DEPL, max_essais=MAX_ESSAIS, meilleur_voisin=meilleur_voisin_simple):
     nb_essais = 0
     Xp = X.copy()
     while nb_essais < max_essais:
@@ -135,7 +139,7 @@ def steepest_hill_climbing_redemarrage(X, max_depl=1000, max_essais=1000, meille
     return Xp
 
 # QUESTION 1.7
-def recherche_tabou(X, taille, max_depl=1000, meilleur_voisin=meilleur_voisin_simple):
+def recherche_tabou(X, taille, max_depl=MAX_DEPL, meilleur_voisin=meilleur_voisin_simple):
     Xp = X.copy()
     tabou = []
     nb_depl = 0
