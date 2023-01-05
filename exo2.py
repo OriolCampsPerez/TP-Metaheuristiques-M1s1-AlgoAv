@@ -80,17 +80,19 @@ def steepest_hill_climbing(X, max_depl=MAX_DEPL): # pris de l'exercice 1
         else:
             stop = True
         nb_depl += 1
-    return Xp
+    return Xp, nb_depl
 
 def steepest_hill_climbing_redemarrage(X, max_depl=MAX_DEPL, max_essais=MAX_ESSAIS): # pris de l'exercice 1
     nb_essais = 0
+    nb_depl = 0
     Xp = X.copy()
     while nb_essais < max_essais:
-        mvX = steepest_hill_climbing(random_sol(), max_depl)
+        mvX, nb_depl_tmp = steepest_hill_climbing(random_sol(), max_depl)
+        nb_depl += nb_depl_tmp
         if f(mvX) < f(Xp):
             Xp = mvX
         nb_essais += 1
-    return Xp
+    return Xp, nb_depl
 
 # QUESTION 2.5
 def recherche_tabou(X, taille, max_depl=MAX_DEPL): # pris de l'exercice 1
@@ -111,26 +113,26 @@ def recherche_tabou(X, taille, max_depl=MAX_DEPL): # pris de l'exercice 1
             if len(tabou) > taille:
                 tabou.pop(0)
         nb_depl += 1
-    return Xp
+    return Xp, nb_depl
 
 
 # AFFICHAGE DES RÉSULTATS
 
-shc = steepest_hill_climbing(initX)
+shc, nb_depl_shc = steepest_hill_climbing(initX)
 print("SHC sans redemarrage:\t"+str(shc)+"\n")
-shc_red = steepest_hill_climbing_redemarrage(initX)
+shc_red, nb_depl_shc_red = steepest_hill_climbing_redemarrage(initX)
 print("SHC avec redemarrage:\t"+str(shc_red)+"\n")
 
-rech_tabou_small= recherche_tabou(initX, 10)
+rech_tabou_small, nb_depl_rech_tabou_small = recherche_tabou(initX, 10)
 print("R Tabou (len=10):\t"+str(rech_tabou_small)+"\n")
-rech_tabou_big  = recherche_tabou(initX, 1000)
+rech_tabou_big, nb_depl_rech_tabou_big = recherche_tabou(initX, 1000)
 print("R Tabou (len=1000):\t"+str(rech_tabou_big)+"\n")
 
 print()
 print("Solution initiale\t"+"f(X) = "+str(f(initX)))
 
-print("SHC sans redemarrage\t"+"f(X) = "+str(f(shc)))
-print("SHC avec redemarrage\t"+"f(X) = "+str(f(shc_red)))
+print("SHC sans redemarrage\t"+"f(X) = "+str(f(shc))+ "\tNombre de déplacements:\t"+str(nb_depl_shc))
+print("SHC avec redemarrage\t"+"f(X) = "+str(f(shc_red))+ "\tNombre de déplacements:\t"+str(nb_depl_shc_red))
 # Résultats SHC (avec options par défaut) pour le fichier tsp5.txt
 #   sans redémarrage: 2 solutions différentes de f(X)
 #       f(X) = 196.12466980422548
@@ -138,8 +140,8 @@ print("SHC avec redemarrage\t"+"f(X) = "+str(f(shc_red)))
 #   avec redémarrage: 1 solution de f(X)
 #       f(X) = 194.04052963659356
 
-print("R Tabou (len=10)=\t"+"f(X) = "+str(f(rech_tabou_small)))
-print("R Tabou (len=1000)=\t"+"f(X) = "+str(f(rech_tabou_big)))
+print("R Tabou (len=10)=\t"+"f(X) = "+str(f(rech_tabou_small))+ "\tNombre de déplacements:\t"+str(nb_depl_rech_tabou_small))
+print("R Tabou (len=1000)=\t"+"f(X) = "+str(f(rech_tabou_big))+ "\tNombre de déplacements:\t"+str(nb_depl_rech_tabou_big))
 # Résultats Tabou (avec options par défaut) pour le fichier tsp5.txt
 #   Résultats similaires à ceux de SHC sans redémarrage (aussi deux resultats)
 
