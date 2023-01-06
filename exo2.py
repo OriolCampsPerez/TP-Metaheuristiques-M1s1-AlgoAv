@@ -95,25 +95,54 @@ def steepest_hill_climbing_redemarrage(X, max_depl=MAX_DEPL, max_essais=MAX_ESSA
     return Xp, nb_depl
 
 # QUESTION 2.5
-def recherche_tabou(X, taille, max_depl=MAX_DEPL): # pris de l'exercice 1
+def trouver_voisins(X): # même algo que dans meilleur_voisin, mais on retourne tous les voisins
+    voisins = []
+    for i in range(0, len(X)-1):
+        for j in range(0+i, len(X)-1):
+            voisinX = X.copy()
+            voisinX[i], voisinX[j+1] = voisinX[j+1], voisinX[i]
+            voisins.append(voisinX)
+    return voisins
+
+def trouver_voisins_non_tabous(voisins, tabou): # on retourne les voisins non tabous
+    non_tabous = []
+    for voisin in voisins:
+        if voisin not in tabou:
+            non_tabous.append(voisin)
+    return non_tabous
+
+def meilleur_voisin_non_tabou(X, voisins_non_tabous): # on retourne le meilleur voisin non tabou
+    meilleur = X.copy()
+    for voisin in voisins_non_tabous:
+        if f(voisin) < f(meilleur):
+            meilleur = voisin
+    return meilleur
+
+def recherche_tabou(X, taille, max_depl=MAX_DEPL): 
     Xp = X.copy()
     tabou = []
     nb_depl = 0
     stop = False
+    meilleurX = Xp
     while nb_depl < max_depl and not stop:
-        mvX = meilleur_voisin(Xp)
-        if mvX in tabou:
-            stop = True
+        voisins = trouver_voisins(Xp)
+        voisins_non_tabous = trouver_voisins_non_tabous(voisins, tabou)
+
+        if len(voisins_non_tabous) > 0:
+            mvX = meilleur_voisin_non_tabou(Xp, voisins_non_tabous)
         else:
-            if f(mvX) < f(Xp):
-                Xp = mvX
-            else:
-                stop = True
-            tabou.append(Xp)
-            if len(tabou) > taille:
-                tabou.pop(0)
+            stop = True # plus de voisin non tabou
+
+        tabou.append(Xp)
+        if len(tabou) > taille:
+            tabou.pop(0)
+
+        if f(mvX) < f(meilleurX):
+            meilleurX = mvX # stockage meilleure solution courante
+        Xp = mvX
         nb_depl += 1
-    return Xp, nb_depl
+
+    return meilleurX, nb_depl
 
 
 # AFFICHAGE DES RÉSULTATS
