@@ -162,23 +162,6 @@ print("Solution initiale\t"+"f(X) = "+str(f(initX)))
 
 print("SHC sans redemarrage\t"+"f(X) = "+str(f(shc))+ "\tNombre de déplacements:\t"+str(nb_depl_shc))
 print("SHC avec redemarrage\t"+"f(X) = "+str(f(shc_red))+ "\tNombre de déplacements:\t"+str(nb_depl_shc_red))
-# Résultats SHC (avec options par défaut) pour le fichier tsp5.txt
-#   sans redémarrage: 2 solutions différentes de f(X)
-#       f(X) = 196.12466980422548
-#       f(X) = 194.04052963659356
-#   avec redémarrage: 1 solution de f(X)
-#       f(X) = 194.04052963659356
 
 print("R Tabou (len=10)=\t"+"f(X) = "+str(f(rech_tabou_small))+ "\tNombre de déplacements:\t"+str(nb_depl_rech_tabou_small))
 print("R Tabou (len=1000)=\t"+"f(X) = "+str(f(rech_tabou_big))+ "\tNombre de déplacements:\t"+str(nb_depl_rech_tabou_big))
-# Résultats Tabou (avec options par défaut) pour le fichier tsp5.txt
-#   Résultats similaires à ceux de SHC sans redémarrage (aussi deux resultats)
-
-
-# Résultats pour le fichier tsp101.txt
-#   Les algorithmes SHC et Tabou donnent des résultats similaires
-#   et sont très lents (plusieurs minutes au total), notamment le SHC avec 
-#   redémarrage. Cependant, ce dernier done des résultats légèrement 
-#   meilleurs que les autres:
-#       SHC sans redémarrage:   f(X) = 2843.142044372415, 2814.993624582888, 2929.3125267085147, entre autres
-#       les autres deux:        f(X) = 2969.9263560655336, 3032.190042327892, 3053.724937533383, entre autres
